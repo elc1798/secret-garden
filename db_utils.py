@@ -36,7 +36,11 @@ def execute(*args):
     Executes a single SQL command
     """
     c = Connection(PROJECT_DB_NAME)
-    retval = c.execute(*args)
+    retval = None
+    try:
+        retval = c.execute(*args)
+    except:
+        retval = None
     c.destroy()
     return retval
 
