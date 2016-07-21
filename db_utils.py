@@ -8,6 +8,7 @@ class Connection:
     """
     Class to simplify executing SQL queries
     """
+
     def __init__(self, db_name):
         """
         Sets up the SQLite3 connection and cursor variable
