@@ -2,7 +2,6 @@ import db_utils as dbu
 import AESCipher
 
 class Session:
-
     def __init__(self, master):
         self.master = master
         self.enkryptor = AESCipher.AESCipher(self.master)

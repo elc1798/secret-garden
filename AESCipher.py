@@ -8,7 +8,6 @@ pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
 unpad = lambda s : s[0:-ord(s[-1])]
 
 class AESCipher:
-
     def __init__( self, key ):
         self.key = pad(key)
 
@@ -19,8 +18,11 @@ class AESCipher:
         return base64.b64encode( iv + cipher.encrypt( raw ) )
 
     def decrypt( self, enc ):
-        enc = base64.b64decode(enc)
-        iv = enc[:16]
-        cipher = AES.new(self.key, AES.MODE_CBC, iv )
-        return unpad(cipher.decrypt( enc[16:] ))
+        try:
+            enc = base64.b64decode(enc)
+            iv = enc[:16]
+            cipher = AES.new(self.key, AES.MODE_CBC, iv )
+            return unpad(cipher.decrypt( enc[16:] ))
+        except:
+            return "Bad decryption"
 
