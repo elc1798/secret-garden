@@ -16,10 +16,10 @@ class Session:
         dbu.execute(query, (key, self.enkryptor.encrypt(password)))
 
     def get_password_by_key(self, key):
-        query = "SELECT hash FROM %s WHERE key=?;" % (dbu.PROJECT_TABLE_NAME,)
+        query = "SELECT key, hash FROM %s WHERE key=?;" % (dbu.PROJECT_TABLE_NAME,)
         rows = dbu.execute(query, (key,))
         assert(len(rows) <= 1)
-        return self.enkryptor.decrypt(rows[0][0]) if len(rows) == 1 else "Invalid key"
+        return [ rows[0][0], self.enkryptor.decrypt(rows[0][1]) ] if len(rows) == 1 else "Invalid key"
 
     def get_keys(self):
         query = "SELECT key FROM %s;" % (dbu.PROJECT_TABLE_NAME,)
