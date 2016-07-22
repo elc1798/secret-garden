@@ -18,6 +18,32 @@
         <!-- Custom styles for this template -->
         <link href="{{ url_for('static', filename='dashboard.css') }}" rel="stylesheet">
 
+        <style>
+            .btn {
+                position: relative;
+                display: inline-block;
+                font-size: 8px;
+                font-weight: bold;
+                color: #333;
+                white-space: nowrap;
+                vertical-align: middle;
+                cursor: pointer;
+                background-color: #eee;
+                background-image: linear-gradient(#fcfcfc, #eee);
+                border: 1px solid #d5d5d5;
+                border-radius: 2px;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                -webkit-appearance: none
+            }
+            .hide-text {
+                text-indent: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        </style>
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -52,7 +78,7 @@
                     <br>
 
                     <center>
-                        <table style="width:70%">
+                        <table style="width:70%" class="table-striped">
                             <tr>
                                 <td>
                                     <h2 class="text-center sub-header"> Service / Site </h2>
@@ -64,14 +90,20 @@
                                     <h2 class="text-center sub-header"> Password </h2>
                                 </td>
                             </tr>
+                            {% set id = 1 %}
                             {% for (key, uname, pass) in DATA %}
                             <tr>
                                 <td class="text-center"> <b> {{ key }} </b> </td>
                                 <td class="text-center"> <b> {{ uname }} </b> </td>
                                 <td class="text-center">
-                                    <input type="password" value="{{ pass }}" readonly>
+                                    <input class="hide-text" id="{{ 'pass' + id|string }}" type="text" value="{{ pass }}" readonly>
+                                    <button class="btn"
+                                        data-clipboard-target="#{{ 'pass' + id|string }}">
+                                        &gt;
+                                    </button>
                                 </td>
                             </tr>
+                            {% set id = id + 1 %}
                             {% endfor %}
                         </table>
                     </center>
@@ -83,7 +115,11 @@
             ================================================== -->
             <!-- Placed at the end of the document so the pages load faster -->
             <script src="{{ url_for('static', filename='jquery-1.11.3.min.js') }}"></script>
+            <script src="{{ url_for('static', filename='clipboard.js') }}"></script>
             <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+            <script>
+                var cblistener = new Clipboard('.btn');
+            </script>
     </body>
 
 </html>
