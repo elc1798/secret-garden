@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import db_utils as dbu
 import AESCipher
 
@@ -33,4 +35,9 @@ class Session:
         query = "SELECT DISTINCT key FROM %s;" % (dbu.PROJECT_TABLE_NAME,)
         rows = dbu.execute(query)
         return rows
+
+    def get_all(self):
+        query = "SELECT key, username, hash FROM %s;" % (dbu.PROJECT_TABLE_NAME,)
+        rows = dbu.execute(query,)
+        return [ ( row[0], row[1], self.enkryptor.decrypt(row[2]) ) for row in rows ]
 

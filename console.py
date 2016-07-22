@@ -77,6 +77,7 @@ class S3kr3t:
             "remove" : self.session.remove_from_table,
             "get" : self.session.get_password_by_key,
             "show" : self.session.get_keys,
+            "showall" : self.session.get_all,
             "exit" : sys.exit,
             "quit" : sys.exit
         }
@@ -103,7 +104,7 @@ class S3kr3t:
             l = the_thing.split(" ")
             output = ex3cut0r(self.commands[l[0]], *tuple(l[1:]))
             sys.stdout.write(beautify(output))
-        except KeyboardInterrupt:
+        except KeyboardInterrupt, EOFError:
             return
         except:
             print "Traceback:", traceback.print_exc()
@@ -118,7 +119,7 @@ def main():
         try:
             command = str(raw_input("<(^_^)> "))
             secret_session.do_the_thing_with_the_thing_please(command)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt, EOFError:
             print
 
 if __name__ == "__main__":
