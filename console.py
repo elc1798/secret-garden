@@ -1,4 +1,5 @@
 import sys, traceback
+import getpass
 
 import db_session as dbs
 
@@ -103,7 +104,7 @@ class S3kr3t:
 
 def main():
     print "Welcome to the Sekr3t Gard3n."
-    fate = str(raw_input("What is your secret? "))
+    fate = str(getpass.getpass("What is your secret? ")).encode('utf-8')
     secret_session = S3kr3t(fate)
     command = ""
     while command not in ["exit", "quit"]:
