@@ -65,6 +65,7 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/add">Add new entry</a></li>
                         <li><a href="/logout">Log Out</a></li>
                     </ul>
                 </div>
@@ -89,6 +90,9 @@
                                 <td>
                                     <h2 class="text-center sub-header"> Password </h2>
                                 </td>
+                                <td>
+                                    <h2 class="text-center sub-header"> Remove </h2>
+                                </td>
                             </tr>
                             {% set id = 1 %}
                             {% for (key, uname, pass) in DATA %}
@@ -101,6 +105,9 @@
                                         data-clipboard-target="#{{ 'pass' + id|string }}">
                                         &gt;
                                     </button>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/remove?key={{ key }}&uname={{ uname }}">Remove</a>
                                 </td>
                             </tr>
                             {% set id = id + 1 %}

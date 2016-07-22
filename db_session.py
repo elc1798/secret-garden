@@ -17,6 +17,9 @@ class Session:
             dbu.execute(query, (key, username))
 
     def insert_into_table(self, key, username, password):
+        existing = self.get_password_by_key(key, username)
+        if len(existing) > 0:
+            return
         query = "INSERT INTO %s (key, username, hash) VALUES (? , ? , ?);"
         query = query % (dbu.PROJECT_TABLE_NAME,)
         dbu.execute(query, (key, username, self.enkryptor.encrypt(password)))
