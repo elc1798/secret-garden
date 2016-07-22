@@ -1,7 +1,11 @@
 import sqlite3
+import os
 import argparse
 
-PROJECT_DB_NAME = "passwords.db"
+this_path = os.path.realpath(__file__)
+this_dir = os.path.dirname(this_path)
+
+PROJECT_DB_NAME = this_dir + "/passwords.db"
 PROJECT_TABLE_NAME = "passwords"
 
 class Connection:
@@ -32,15 +36,13 @@ class Connection:
         del self.cursor
         del self.conn
 
-PROJECT_MAIN_CONNECTION = Connection(PROJECT_DB_NAME)
-
 def execute(*args):
     """
     Executes a single SQL command
     """
     retval = None
     try:
-        retval = PROJECT_MAIN_CONNECTION.execute(*args)
+        retval = Connection(PROJECT_DB_NAME).execute(*args)
     except:
         retval = None
     return retval
