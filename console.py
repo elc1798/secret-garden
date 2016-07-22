@@ -1,4 +1,4 @@
-import sys
+import sys, traceback
 
 import db_session as dbs
 
@@ -25,9 +25,6 @@ class Gridifier:
         gaps = [ "-" * (n + 2) for n in widths ]
         separator = "+" + "+".join(gaps) + "+\n"
         rows = []
-        # spacers = []
-        # while len(spacers) < len(widths):
-        #     spacers.append(" " * widths[len(spacers)])
         for i in range(len(self.array_repr)):
             padded = [ pad(self.array_repr[i][j], widths[j]) for j in range(len(self.array_repr[i])) ]
             while len(padded) < len(widths):
@@ -57,7 +54,7 @@ def beautify(s):
             if len(s[0]) == 1:
                 l.append( [ str(t[0]) for t in s[i : i + 4] ] )
             else:
-                if type(s[i]) == tuple:
+                if type(s[i]) in [ tuple, list ]:
                     for t in s[i : i + 4]:
                         l.append( [ str(item) for item in t ] )
                 elif type(s[i]) in [ str, unicode ]:
@@ -101,7 +98,7 @@ class S3kr3t:
             output = ex3cut0r(self.commands[l[0]], *tuple(l[1:]))
             print beautify(output)
         except:
-            print "Unexpected error:", sys.exc_info()[0]
+            print "Traceback:", traceback.print_exc()
             print output
 
 def main():
