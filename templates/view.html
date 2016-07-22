@@ -82,7 +82,7 @@
                         <table style="width:70%" class="table-striped">
                             <tr>
                                 <td>
-                                    <h2 class="text-center sub-header"> Service / Site </h2>
+                                    <h2 class="text-center sub-header"> Service </h2>
                                 </td>
                                 <td>
                                     <h2 class="text-center sub-header"> Username </h2>
@@ -100,7 +100,7 @@
                                 <td class="text-center"> <b> {{ key }} </b> </td>
                                 <td class="text-center"> <b> {{ uname }} </b> </td>
                                 <td class="text-center">
-                                    <input class="hide-text" id="{{ 'pass' + id|string }}" type="text" value="{{ pass }}" readonly>
+                                    <input style="width:10px;height:10px" class="hide-text" id="{{ 'pass' + id|string }}" type="text" value="{{ pass }}" readonly>
                                     <button class="btn"
                                         data-clipboard-target="#{{ 'pass' + id|string }}">
                                         &gt;
