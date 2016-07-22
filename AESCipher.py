@@ -28,3 +28,6 @@ class AESCipher:
         except:
             return ""
 
+    def __del__( self ):
+        del self.key
+

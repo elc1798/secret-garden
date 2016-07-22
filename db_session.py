@@ -44,3 +44,7 @@ class Session:
         rows = dbu.execute(query,)
         return [ ( row[0], row[1], self.enkryptor.decrypt(row[2]) ) for row in rows ]
 
+    def __del__(self):
+        del self.master
+        del self.enkryptor
+

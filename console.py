@@ -110,6 +110,10 @@ class S3kr3t:
             print "Traceback:", traceback.print_exc()
             print output
 
+    def __del__(self):
+        del self.session
+        del self.commands
+
 def main():
     print "Welcome to the Sekr3t Gard3n."
     fate = str(getpass.getpass("What is your secret? ")).encode('utf-8')
