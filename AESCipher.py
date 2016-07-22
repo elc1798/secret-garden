@@ -22,7 +22,9 @@ class AESCipher:
             enc = base64.b64decode(enc)
             iv = enc[:16]
             cipher = AES.new(self.key, AES.MODE_CBC, iv )
-            return unpad(cipher.decrypt( enc[16:] ))
+            unpadded = unpad(cipher.decrypt( enc[16:] ))
+            test_UTF_8 = unpadded.decode('utf-8')
+            return unpadded
         except:
-            return "Bad decryption"
+            return ""
 
