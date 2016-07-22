@@ -98,6 +98,8 @@ class S3kr3t:
             l = the_thing.split(" ")
             output = ex3cut0r(self.commands[l[0]], *tuple(l[1:]))
             print beautify(output)
+        except KeyboardInterrupt:
+            return
         except:
             print "Traceback:", traceback.print_exc()
             print output
@@ -108,8 +110,11 @@ def main():
     secret_session = S3kr3t(fate)
     command = ""
     while command not in ["exit", "quit"]:
-        command = str(raw_input("<(^_^)> "))
-        secret_session.do_the_thing_with_the_thing_please(command)
+        try:
+            command = str(raw_input("<(^_^)> "))
+            secret_session.do_the_thing_with_the_thing_please(command)
+        except KeyboardInterrupt:
+            print
 
 if __name__ == "__main__":
     main()
