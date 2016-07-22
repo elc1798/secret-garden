@@ -6,23 +6,31 @@ class Session:
         self.master = master
         self.enkryptor = AESCipher.AESCipher(self.master)
 
-    def remove_from_table(self, key):
-        query = "DELETE FROM %s WHERE key=?;" % (dbu.PROJECT_TABLE_NAME)
-        dbu.execute(query, (key,))
+    def remove_from_table(self, key, username=""):
+        if username == "":
+            query = "DELETE FROM %s WHERE key=?;" % (dbu.PROJECT_TABLE_NAME)
+            dbu.execute(query, (key,))
+        else:
+            query = "DELETE FROM %s WHERE key=? AND username=?;" % (dbu.PROJECT_TABLE_NAME)
+            dbu.execute(query, (key, username))
 
-    def insert_into_table(self, key, password):
-        query = "INSERT OR REPLACE INTO %s (key, hash) VALUES (? , ?);"
+    def insert_into_table(self, key, username, password):
+        query = "INSERT INTO %s (key, username, hash) VALUES (? , ? , ?);"
         query = query % (dbu.PROJECT_TABLE_NAME,)
-        dbu.execute(query, (key, self.enkryptor.encrypt(password)))
+        dbu.execute(query, (key, username, self.enkryptor.encrypt(password)))
 
-    def get_password_by_key(self, key):
-        query = "SELECT key, hash FROM %s WHERE key=?;" % (dbu.PROJECT_TABLE_NAME,)
-        rows = dbu.execute(query, (key,))
-        assert(len(rows) <= 1)
-        return [ rows[0][0], self.enkryptor.decrypt(rows[0][1]) ] if len(rows) == 1 else "Invalid key"
+    def get_password_by_key(self, key, username=""):
+        rows = []
+        if username == "":
+            query = "SELECT key, username, hash FROM %s WHERE key=?;" % (dbu.PROJECT_TABLE_NAME,)
+            rows = dbu.execute(query, (key,))
+        else:
+            query = "SELECT key, username, hash FROM %s WHERE key=? AND username=?;" % (dbu.PROJECT_TABLE_NAME,)
+            rows = dbu.execute(query, (key, username))
+        return [ ( row[0], row[1], self.enkryptor.decrypt(row[2]) ) for row in rows ]
 
     def get_keys(self):
-        query = "SELECT key FROM %s;" % (dbu.PROJECT_TABLE_NAME,)
+        query = "SELECT DISTINCT key FROM %s;" % (dbu.PROJECT_TABLE_NAME,)
         rows = dbu.execute(query)
         return rows
 

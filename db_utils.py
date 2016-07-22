@@ -24,7 +24,7 @@ class Connection:
         self.conn.commit()
         return self.cursor.fetchall()
 
-    def destroy(self):
+    def __del__(self):
         """
         Destroys the internal variables of this class
         """
@@ -32,17 +32,17 @@ class Connection:
         del self.cursor
         del self.conn
 
+PROJECT_MAIN_CONNECTION = Connection(PROJECT_DB_NAME)
+
 def execute(*args):
     """
     Executes a single SQL command
     """
-    c = Connection(PROJECT_DB_NAME)
     retval = None
     try:
-        retval = c.execute(*args)
+        retval = PROJECT_MAIN_CONNECTION.execute(*args)
     except:
         retval = None
-    c.destroy()
     return retval
 
 def is_table_set_up():
@@ -61,7 +61,7 @@ def create_project_table():
     try:
         if not is_table_set_up():
             execute(
-                "CREATE TABLE %s (key TEXT, hash TEXT);" % (PROJECT_TABLE_NAME,)
+                "CREATE TABLE %s (key TEXT, username TEXT, hash TEXT);" % (PROJECT_TABLE_NAME,)
             )
         return True
     except:
