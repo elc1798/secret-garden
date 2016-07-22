@@ -40,9 +40,6 @@ def ex3cut0r(func, *args, **kwargs):
     return func(*args, **kwargs)
 
 def beautify(s):
-    """
-    Return num_rows x 4 grid of s
-    """
     l = []
     if s == None:
         return ""
@@ -63,7 +60,7 @@ def beautify(s):
                 else:
                     l.append( [ 'wtf this borkened' ] )
     else:
-        return "Output type unrecognized"
+        return "Output type unrecognized\n"
     return Gridifier(l).get_grid()
 
 class S3kr3t:
@@ -73,6 +70,8 @@ class S3kr3t:
     def __init__(self, dekrypshun):
         self.session = dbs.Session(dekrypshun)
         self.commands = {
+            "spill" : self.spill,
+            "clear" : self.clear,
             "help" : self.show_commands,
             "insert" : self.session.insert_into_table,
             "remove" : self.session.remove_from_table,
@@ -87,6 +86,12 @@ class S3kr3t:
         for key in self.commands.keys():
             print "\t%s" % (key,)
 
+    def spill(self):
+        print repr(self.session.enkryptor.key)
+
+    def clear(self):
+        sys.stdout.write("\033\143")
+
     def do_the_thing_with_the_thing_please(self, the_thing):
         #spongebobreferences
 
@@ -97,7 +102,7 @@ class S3kr3t:
         try:
             l = the_thing.split(" ")
             output = ex3cut0r(self.commands[l[0]], *tuple(l[1:]))
-            print beautify(output)
+            sys.stdout.write(beautify(output))
         except KeyboardInterrupt:
             return
         except:
