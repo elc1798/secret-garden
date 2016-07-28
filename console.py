@@ -86,8 +86,7 @@ class S3kr3t:
 
     def show_commands(self):
         print "Commands:"
-        for key in self.commands.keys():
-            print "\t%s" % (key,)
+        sys.stdout.write(beautify(self.commands.keys()))
 
     def spill(self):
         print repr(self.session.enkryptor.key)
