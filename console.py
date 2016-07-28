@@ -1,4 +1,4 @@
-import sys, traceback
+import os, sys, traceback
 import getpass
 
 import db_session as dbs
@@ -78,6 +78,8 @@ class S3kr3t:
             "get" : self.session.get_password_by_key,
             "show" : self.session.get_keys,
             "showall" : self.session.get_all,
+            "send2clip" : self.copy_to_sys_clipboard,
+            "copy" : self.copy_to_sys_clipboard,
             "exit" : sys.exit,
             "quit" : sys.exit
         }
@@ -92,6 +94,27 @@ class S3kr3t:
 
     def clear(self):
         sys.stdout.write("\033\143")
+
+    def copy_to_sys_clipboard(self, key, username):
+        data = self.session.get_password_by_key(key, username)
+        if len(data) != 1:
+            print "No data copied!"
+            return None
+        else:
+            # CHECK OPERATING SYSTEM FOR COMMAND
+            command = ""
+            OS_NAME = sys.platform
+            if OS_NAME.startswith("linux"):
+                command = "xclip -selection c"
+            elif OS_NAME.startswith("darwin"):
+                command = "pbcopy"
+            elif OS_NAME in [ "win32" , "cygwin" ]:
+                print "The 'send2clip' command is not supported on Windows!"
+                return None
+            command = "echo %s | %s" % (data[0][2], command)
+            os.system(command)
+            return "Copied to clipboard!"
+
 
     def do_the_thing_with_the_thing_please(self, the_thing):
         #spongebobreferences
