@@ -74,6 +74,8 @@ def remove():
     return redirect(url_for("view"))
 
 @login_required
+@app.route("/logout")
+@app.route("/logout/")
 def logout():
     session.clear()
     current_session = None
