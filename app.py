@@ -10,7 +10,8 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if "logged_in" not in session or not session['logged_in'] \
-                or "key" not in session or current_session == None:
+                or "key" not in session or current_session == None \
+                or not current_session.verify_password():
             session.clear()
             return redirect(url_for("login"))
         return f(*args, **kwargs)
@@ -37,7 +38,7 @@ def login():
         session['logged_in'] = True
         session['key'] = str(password)
         global current_session
-        current_session = dbs.Session(session['key'])
+        current_session = dbs.Session(session['key'], True)
         return redirect(url_for("view"))
 
 @app.route("/view")

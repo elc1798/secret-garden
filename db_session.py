@@ -4,10 +4,11 @@ import db_utils as dbu
 import AESCipher
 
 class Session:
-    def __init__(self, master):
+    def __init__(self, master, run_as_flask=False):
         self.master = master
         self.enkryptor = AESCipher.AESCipher(self.master)
-        assert(self.verify_password())
+        if not run_as_flask:
+            assert(self.verify_password())
 
     def remove_from_table(self, key, username=""):
         if username == "":
