@@ -5,8 +5,15 @@ import argparse
 this_path = os.path.realpath(__file__)
 this_dir = os.path.dirname(this_path)
 
-PROJECT_DB_NAME = this_dir + "/passwords.db"
 PROJECT_TABLE_NAME = "passwords"
+CONFIG_TABLE_NAME = "sekrets"
+
+CONFIG_KEYS = {
+    "database-name" : "passwords.db",
+    "auth-key" : "verification"
+}
+
+PROJECT_DB_NAME = this_dir + os.path.sep + CONFIG_KEYS["database-name"]
 
 class Connection:
     """
@@ -47,29 +54,49 @@ def execute(*args):
         retval = None
     return retval
 
-def is_table_set_up():
+def is_project_table_set_up():
     """
-    Returns True if the table exists in the database, False otherwise
+    Returns True if the project "password keeper" table exists in the database,
+    False otherwise
     """
     return len(execute(
         "SELECT name FROM sqlite_master WHERE type='table' AND name=?;",
         (PROJECT_TABLE_NAME,)
     )) == 1
 
+def is_config_table_set_up():
+    """
+    Returns True if the project configuration table exists in the database,
+    False otherwise
+    """
+    return len(execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name=?;",
+        (CONFIG_TABLE_NAME,)
+    )) == 1
+
+def is_table_set_up():
+    """
+    Returns True if the table exists in the database, False otherwise
+    """
+    return is_project_table_set_up() and is_config_table_set_up()
+
 def create_project_table():
     """
     Returns True if table was successfully created, False otherwise
     """
     try:
-        if not is_table_set_up():
+        if not is_project_table_set_up():
             execute(
                 "CREATE TABLE %s (key TEXT, username TEXT, hash TEXT);" % (PROJECT_TABLE_NAME,)
+            )
+        if not is_config_table_set_up():
+            execute(
+                "CREATE TABLE %s (key TEXT, value TEXT);" % (CONFIG_TABLE_NAME,)
             )
         return True
     except:
         raise
         return False
-
 
 def delete_project_table():
     """
@@ -79,6 +106,10 @@ def delete_project_table():
         if is_table_set_up():
             execute(
                 "DROP TABLE %s" % (PROJECT_TABLE_NAME,)
+            )
+        if is_config_table_set_up():
+            execute(
+                "DROP TABLE %s" % (CONFIG_TABLE_NAME,)
             )
         return True
     except:

@@ -7,6 +7,7 @@ class Session:
     def __init__(self, master):
         self.master = master
         self.enkryptor = AESCipher.AESCipher(self.master)
+        assert(self.verify_password())
 
     def remove_from_table(self, key, username=""):
         if username == "":
@@ -43,6 +44,24 @@ class Session:
         query = "SELECT key, username, hash FROM %s;" % (dbu.PROJECT_TABLE_NAME,)
         rows = dbu.execute(query,)
         return [ ( row[0], row[1], self.enkryptor.decrypt(row[2]) ) for row in rows ]
+
+    def get_config_value(self, value):
+        query = "SELECT value FROM %s WHERE key='%s';"
+        query = query % (dbu.CONFIG_TABLE_NAME, dbu.CONFIG_KEYS[value])
+        # print "EXECUTING QUERY:", repr(query)
+        rows = dbu.execute(query)
+        # print rows
+        return rows[0][0] if rows else None
+
+    def verify_password(self):
+        # print self.get_config_value("auth-key")
+        if len(self.get_keys()) == 0 or not self.get_config_value("auth-key"):
+            query = "INSERT INTO %s (key, value) VALUES (? , ?);"
+            query = query % (dbu.CONFIG_TABLE_NAME,)
+            dbu.execute(query, (dbu.CONFIG_KEYS["auth-key"], self.enkryptor.encrypt(self.master)))
+            return True
+        else:
+            return self.enkryptor.decrypt(self.get_config_value("auth-key")) == self.master
 
     def __del__(self):
         del self.master
