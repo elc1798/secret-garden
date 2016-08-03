@@ -12,10 +12,10 @@ class Session:
 
     def remove_from_table(self, key, username=""):
         if username == "":
-            query = "DELETE FROM %s WHERE key='?';" % (dbu.PROJECT_TABLE_NAME)
+            query = "DELETE FROM %s WHERE key=?;" % (dbu.PROJECT_TABLE_NAME)
             dbu.execute(query, (key,))
         else:
-            query = "DELETE FROM %s WHERE key='?' AND username='?';" % (dbu.PROJECT_TABLE_NAME)
+            query = "DELETE FROM %s WHERE key=? AND username=?;" % (dbu.PROJECT_TABLE_NAME)
             dbu.execute(query, (key, username))
 
     def insert_into_table(self, key, username, password):

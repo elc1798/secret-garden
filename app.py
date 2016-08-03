@@ -1,5 +1,8 @@
 from flask import Flask, render_template, session, redirect, request, url_for
 from functools import wraps
+
+import urllib
+
 import db_session as dbs
 
 app = Flask(__name__)
@@ -69,7 +72,9 @@ def add():
 @login_required
 def remove():
     tkey = request.args.get('key')
+    tkey = str(urllib.unquote(tkey).decode('utf8'))
     tuname = request.args.get('uname')
+    tuname = str(urllib.unquote(tuname).decode('utf8'))
     global current_session
     current_session.remove_from_table(tkey, tuname)
     return redirect(url_for("view"))
