@@ -110,7 +110,10 @@ class S3kr3t:
             elif OS_NAME in [ "win32" , "cygwin" ]:
                 print "The 'send2clip' command is not supported on Windows!"
                 return None
-            command = "echo %s | %s" % (data[0][2], command)
+            command = "bash -c \"echo -n '%s' | %s\"" % (
+                data[0][2].strip().replace("$", "\\$"),
+                command
+            )
             os.system(command)
             return "Copied to clipboard!"
 
